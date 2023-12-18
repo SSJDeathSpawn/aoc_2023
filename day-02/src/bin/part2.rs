@@ -1,22 +1,19 @@
-use std::io::BufRead;
-
-use anyhow::Result;
-
-fn main() -> Result<()> {
-    let stdin = std::io::stdin();
-    let mut line = String::new();
+fn part2(raw_input: String) -> i32 {
+    let mut lines: Vec<String> = raw_input.lines().map(String::from).collect();
     let mut sum: i32 = 0;
 
-    while let Ok(_) = stdin.lock().read_line(&mut line) {
+    for line in lines.iter_mut() {
         if line == "" {
             break;
         }
-        line = line
+        if line.starts_with("Game ") {
+        *line = line
             .strip_prefix("Game ")
             .map(|line| line.to_string())
-            .unwrap_or(line);
+            .unwrap();
+        }
         let _id: i32;
-        (_id, line) = line
+        (_id, *line) = line
             .split_once(':')
             .map(|(id, line)| (id.parse::<i32>().unwrap(), line.to_string()))
             .unwrap();
@@ -41,6 +38,19 @@ fn main() -> Result<()> {
         sum += power;
         line.clear();
     }
-    println!("{}", sum);
-    Ok(())
+    sum
+}
+
+fn main() {
+    let input = std::fs::read_to_string("data.txt").unwrap();
+    println!("{}", part2(input));
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn solved_part2() {
+        let input = std::fs::read_to_string("test.txt").unwrap();
+        assert_eq!(2286, crate::part2(input));
+    }
 }

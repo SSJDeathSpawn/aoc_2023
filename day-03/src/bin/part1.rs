@@ -36,19 +36,11 @@ fn is_normal(lines: &Vec<String>, x: usize, y: usize) -> bool {
     return it_is;
 }
 
-fn main() {
-    let stdin = std::io::stdin();
-    let mut raw_lines = String::new();
-    let _ = stdin.lock().read_to_string(&mut raw_lines);
-
-    let lines: Vec<String> = raw_lines
-        .split('\n')
-        .map(String::from)
-        .filter(|line| !line.is_empty())
-        .collect();
+fn part1(raw_input: String) -> i32{
+    let lines: Vec<String> = raw_input.lines().map(String::from).collect();
 
     let mut sum = 0;
-    for (y, line) in lines.iter().enumerate() {
+    for (y,line) in lines.iter().enumerate() {
         let mut cur_num: String = String::new();
         let mut is_part: bool = false;
         for (x, ch) in line.char_indices() {
@@ -57,7 +49,6 @@ fn main() {
                 is_part = is_part || !is_normal(&lines, x, y);
             } else {
                 if is_part && !cur_num.is_empty() {
-                    println!("{}", cur_num);
                     sum += cur_num.parse::<i32>().unwrap();
                 }
                 cur_num.clear();
@@ -65,10 +56,23 @@ fn main() {
             }
         }
         if is_part && !cur_num.is_empty() {
-            println!("{}", cur_num);
             sum += cur_num.parse::<i32>().unwrap();
         }
     }
-    println!("{}", sum);
+    sum
+}
+
+fn main() {
+    let input = std::fs::read_to_string("data.txt").unwrap();
+    println!("{}", part1(input));
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn solved_part1() {
+        let input = std::fs::read_to_string("test.txt").unwrap();
+        assert_eq!(4361, crate::part1(input));
+    }
 }
 

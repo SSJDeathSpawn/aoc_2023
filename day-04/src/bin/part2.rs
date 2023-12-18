@@ -1,25 +1,10 @@
-use std::{io::Read, str::FromStr};
-
-fn win(curr: i32) -> i32 {
-    return if curr == 0 { 1 } else { curr * 2 };
-}
-
-fn win_times(curr: u32) -> i32 {
-    2_i32.pow(curr)
-}
-
-fn main() {
-    let stdin = std::io::stdin();
-    let mut raw_lines = String::new();
-    let _ = stdin.lock().read_to_string(&mut raw_lines);
-    
-    let lines: Vec<String> = raw_lines
+fn part2(raw_input: String) -> i32{
+    let lines: Vec<String> = raw_input
         .lines()
         .filter(|line| !line.is_empty())
         .map(|line| String::from(&line[line.find(':').unwrap()+2..]))
         .collect();
-    
-    let mut sum: i32 = 0;
+
     let mut points: Vec<i32> = vec![0;lines.len()];
 
     for (index, line) in lines.iter().enumerate() {
@@ -46,17 +31,29 @@ fn main() {
         }
         points[index] = score;
     }
-    
+
     let mut counts: Vec<i32> = vec![1;lines.len()];
-    println!("{:?}", points);
 
     for (index, count) in points.into_iter().enumerate() {
         for i in index+1..=index+count as usize {
             counts[i] += counts[index];
         }
     }
-    println!("{:?}", counts);
 
-    println!("{}", counts.into_iter().reduce(i32::wrapping_add).unwrap());
+    counts.into_iter().reduce(i32::wrapping_add).unwrap()
+}
+
+fn main() {
+    let input = std::fs::read_to_string("data.txt").unwrap();
+    println!("{}", part2(input));
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn solved_part2() {
+        let input = std::fs::read_to_string("test.txt").unwrap();
+        assert_eq!(30, crate::part2(input));
+    }
 }
 

@@ -224,32 +224,6 @@ fn part1(raw_input: String) -> u32 {
         .collect();
 
     pairs.sort_by_key(|pairs| pairs.0);
-    println!("{:?}", pairs);
-    println!("{:?}", pairs.iter().map(|pair| pair.1).collect::<Vec<u32>>());
-    return pairs
-        .into_iter()
-        .enumerate()
-        .map(|pair| (pair.0 + 1) as u32 * pair.1 .1)
-        .reduce(std::ops::Add::add)
-        .unwrap();
-}
-
-fn part2(raw_input: String) -> u32 {
-    let raw_lines: Vec<String> = raw_input.lines().map(String::from).collect();
-    let mut pairs: Vec<(Hand<CardTypeJ>, u32)> = raw_lines
-        .into_iter()
-        .map(|line| {
-            let (hand, bet) = line.split_once(' ').unwrap();
-            return (
-                CardTypeJ::new_hand(hand).unwrap(),
-                bet.parse::<u32>().unwrap(),
-            );
-        })
-        .collect();
-
-    pairs.sort_by_key(|pairs| pairs.0);
-    println!("{:?}", pairs);
-    println!("{:?}", pairs.iter().map(|pair| pair.1).collect::<Vec<u32>>());
     return pairs
         .into_iter()
         .enumerate()
@@ -261,23 +235,13 @@ fn part2(raw_input: String) -> u32 {
 fn main() {
     let string = fs::read_to_string("data.txt").unwrap();
     println!("{}", part1(string.clone()));
-    println!("{}", part2(string));
 }
 
 mod tests {
-
     #[test]
     fn solved_part1() {
         let res = crate::part1(std::fs::read_to_string("test.txt").unwrap());
         println!("{}", res);
         assert_eq!(res, 6440);
     }
-
-    #[test]
-    fn solved_part2() {
-        let res = crate::part2(std::fs::read_to_string("test.txt").unwrap());
-        println!("{}", res);
-        assert_eq!(res, 5905);
-    }
-
 }

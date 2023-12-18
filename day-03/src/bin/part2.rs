@@ -60,19 +60,12 @@ fn find_nums(lines: &Vec<String>, x: usize, y: usize) -> Vec<i32> {
     return nums.into_iter().map(|(num, ..)| num).collect();
 }
 
-fn main() {
-    let stdin = std::io::stdin();
-    let mut raw_lines = String::new();
-    let _ = stdin.lock().read_to_string(&mut raw_lines);
-
-    let lines: Vec<String> = raw_lines
-        .split('\n')
-        .map(String::from)
-        .filter(|line| !line.is_empty())
-        .collect();
+fn part2(raw_input: String) -> i32 {
+    let lines: Vec<String> = raw_input.lines().map(String::from).collect();
 
     let mut sum = 0;
     let mut all_nums: Vec<Vec<i32>> = Vec::<Vec<i32>>::new();
+
     for (y, line) in lines.iter().enumerate() {
         for (x, ch) in line.char_indices() {
             if ch == '*' {
@@ -87,11 +80,23 @@ fn main() {
             }
         }
     }
+    sum
+}
 
-    // all_nums.sort_by_key(|num| num[0]);
-    // for num in all_nums {
-    //     println!("{:?}", num);
-    // }
+fn main() {
+    let input = std::fs::read_to_string("data.txt").unwrap();
+    println!("{}", part2(input));
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::part2;
+
     
-    println!("{}", sum);
+    #[test]
+    fn solved_part2() {
+        let input = std::fs::read_to_string("test.txt").unwrap();
+        assert_eq!(467835, part2(input))
+    }
+
 }

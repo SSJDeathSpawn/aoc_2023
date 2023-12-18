@@ -1,14 +1,8 @@
-use std::io::BufRead;
+fn part1(raw_input: String ) -> i32{
+    let lines: Vec<String> = raw_input.lines().map(String::from).collect();
 
-use anyhow::Result;
-
-fn main() -> Result<()>{
-    let stdin = std::io::stdin();
-    let mut line = String::new();
     let mut sum: i32 = 0;
-    let mut counter = 0;
-    while let Ok(_) = stdin.lock().read_line(&mut line) {
-        counter += 1;
+    for line in lines {
         if line == "" {break;}
         let mut first_digit = '\0';
         let mut last_digit = '\0';
@@ -20,11 +14,24 @@ fn main() -> Result<()>{
             }
             last_digit = char;
         }
-        let num = String::from(format!("{}{}", first_digit, last_digit)).parse::<i32>()?;
+        let num = String::from(format!("{}{}", first_digit, last_digit)).parse::<i32>().unwrap();
         sum += num;
-        println!("{}. {} - {} - {}", counter, line.trim(), num, sum);
-        line.clear();
     }
-    println!("{}", sum);
-    Ok(())
+    return sum
+}
+
+fn main() {
+    let lines = std::fs::read_to_string("data.txt").unwrap();
+    println!("{}", part1(lines));
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::part1;
+
+    #[test]
+    fn solved_part1() {
+        let input = std::fs::read_to_string("test.txt").unwrap();
+        assert_eq!(142, part1(input))
+    }
 }

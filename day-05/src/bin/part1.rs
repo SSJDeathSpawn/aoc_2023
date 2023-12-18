@@ -1,5 +1,3 @@
-use std::io::Read;
-
 fn to_u64(num: &str) -> u64 {
     num.parse::<u64>().unwrap()
 }
@@ -13,12 +11,9 @@ fn use_map(num: u64, map: &Vec<(u64, u64, u64)>) -> u64 {
     num
 }
 
-fn main() {
-    let stdin = std::io::stdin();
-    let mut raw_lines = String::new();
-    let _ = stdin.lock().read_to_string(&mut raw_lines);
+fn part1(raw_input: String) -> u64 {
+    let mut lines = raw_input.lines().map(String::from);
 
-    let mut lines = raw_lines.lines().into_iter();
     let mut seeds: Vec<u64> = lines.next().unwrap()[7..]
         .split(' ')
         .map(to_u64)
@@ -47,7 +42,6 @@ fn main() {
         maps.push(map);
     }
     
-    println!("Done with map-making");
 
     for map in maps {
         for seed in seeds.iter_mut() {
@@ -55,5 +49,19 @@ fn main() {
         }
     }
 
-    println!("{:?}", seeds.into_iter().reduce(std::cmp::min).unwrap());
+    seeds.into_iter().reduce(std::cmp::min).unwrap()
+}
+
+fn main() {
+    let input = std::fs::read_to_string("data.txt").unwrap();
+    println!("{}", part1(input));
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn solved_part1() {
+        let input = std::fs::read_to_string("test.txt").unwrap();
+        assert_eq!(35, crate::part1(input));
+    }
 }

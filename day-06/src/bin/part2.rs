@@ -13,33 +13,26 @@ fn solve_quadratic(time: u64, dist: u64) -> u64 {
     (a2.floor() - a1.ceil()) as u64 + 1
 }
 
-fn part1(lines: String) -> u64{
+fn part2(lines: String) -> u64{
     let data: Vec<String> = lines.lines().map(String::from).collect();
     let (_, raw_time) = data[0].split_once(":").unwrap();
-    let times: Vec<u64> = raw_time.split(' ').filter(|time| *time != "").map(|time| time.parse::<u64>().unwrap()).collect();
+    let time: u64 = raw_time.split(' ').filter(|time| *time != "").map(String::from).reduce(|a,b| a + &b).unwrap().parse().unwrap();
     let (_, raw_dists) = data[1].split_once(":").unwrap();
-    let dists: Vec<u64> = raw_dists.split(' ').filter(|time| *time != "").map(|time| time.parse::<u64>().unwrap()).collect();
-
-    let mut acc = 1;
-
-    for (time, dist) in times.into_iter().zip(dists.into_iter()) {
-        let count = solve_quadratic(time, dist);
-        acc *= count;
-    }
-
-    return acc;
+    let dist: u64 = raw_dists.split(' ').filter(|time| *time != "").map(String::from).reduce(|a,b| a + &b).unwrap().parse().unwrap();
+    
+    solve_quadratic(time, dist)
 }
 
 
 fn main() {
     let lines = fs::read_to_string("data.txt").unwrap();
-    println!("{:?}", part1(lines));
+    println!("{:?}", part2(lines));
 }
 
 mod tests {
     #[test]
-    fn solved_part1() {
+    fn solved_part2() {
         let lines = std::fs::read_to_string("test.txt").unwrap();
-        assert_eq!(crate::part1(lines), 288);
+        assert_eq!(crate::part2(lines), 71503);
     }
 }
